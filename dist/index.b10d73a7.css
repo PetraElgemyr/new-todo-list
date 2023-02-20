@@ -1,0 +1,74 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #e0dfdd;
+}
+
+body section.list__form, body section.list__form form#todoForm {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+body section.list__section {
+  border: 1px solid #000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2%;
+  padding: 2%;
+  display: flex;
+}
+
+body section.list__section span#emptyListBtn {
+  background-color: gray;
+  border: 1px solid #000;
+  padding: 2%;
+}
+
+body section.list__section div#todoList {
+  width: 95vw;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+body section.list__section div#todoList p.todoContainer {
+  width: 50%;
+  flex-direction: row;
+  justify-content: space-between;
+  display: flex;
+}
+
+body section.list__section div#todoList .done {
+  color: #424242;
+  text-decoration: line-through;
+}
+
+body .removed__section {
+  height: 100vh;
+}
+
+body .removed__section span#emptyListBtnSecond {
+  background-color: gray;
+  border: 1px solid #000;
+  padding: 2%;
+}
+
+body .removed__section .done {
+  color: #424242;
+  text-decoration: line-through;
+}
+
+/*# sourceMappingURL=index.b10d73a7.css.map */

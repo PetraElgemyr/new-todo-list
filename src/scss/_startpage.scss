@@ -1,0 +1,59 @@
+@use "mixins" as m;
+@use "variables" as v;
+
+body {
+  background-color: rgb(224, 223, 221);
+
+  section.list__form {
+    @include m.centeringCol;
+
+    form#todoForm {
+      @include m.centeringCol;
+    }
+  }
+
+  section.list__section {
+    @include m.centeringCol;
+    border: 1px solid black;
+    padding: 2%;
+    margin: 2%;
+
+    span#emptyListBtn {
+      background-color: gray;
+      padding: 2%;
+      border: 1px solid black;
+    }
+
+    div#todoList {
+      @include m.centeringCol;
+      width: 95vw;
+
+      p.todoContainer {
+        width: 50%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .done {
+        text-decoration: line-through;
+        color: rgb(66, 66, 66);
+      }
+    }
+  }
+
+  .removed__section {
+    height: 100vh;
+
+    span#emptyListBtnSecond {
+      background-color: gray;
+      padding: 2%;
+      border: 1px solid black;
+    }
+
+    .done {
+      text-decoration: line-through;
+      color: rgb(66, 66, 66);
+    }
+  }
+}
