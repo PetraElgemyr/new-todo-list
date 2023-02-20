@@ -51,11 +51,6 @@ body section.list__section div#todoList p.todoContainer {
   display: flex;
 }
 
-body section.list__section div#todoList .done {
-  color: #424242;
-  text-decoration: line-through;
-}
-
 body .removed__section {
   height: 100vh;
 }

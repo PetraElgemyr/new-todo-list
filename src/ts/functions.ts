@@ -9,7 +9,7 @@ export function getTodosFromLS() {
 }
 
 export function getRemovedTodosFromLS() {
-  let todos: RemovedTodo[] = JSON.parse(
+  let todos: Todo[] = JSON.parse(
     localStorage.getItem("removedTodosInLs") || "[]"
   );
   return todos;
@@ -65,7 +65,7 @@ export const createTodoHtml = (todos: Todo[]) => {
     todoTask.innerHTML = todos[i].todo;
     removeTodo.innerHTML = "Ta bort";
 
-    let clickedObject: Todo = todos[i];
+    // let clickedObject: Todo = todos[i];
 
     todoContainer.append(todoTask, checkbox, removeTodo);
     todoWrapper.appendChild(todoContainer);
@@ -81,26 +81,36 @@ export const createTodoHtml = (todos: Todo[]) => {
       console.log("Todos: ", todos);
       console.log("Gjorda todos: ", removedTodos);
     });
-    /*
-    doneBtn.addEventListener("click", () => {
-      //ta bort från todolista
-      let index = todos.indexOf(todos[i]);
-      todos.splice(index, 1);
-      localStorage.setItem("todoList", JSON.stringify(todos));
 
-      // lägg till på borttagnalistan
-      //toggla classname och todo.finished-värdet
-      let newRemovedTodo: RemovedTodo = new RemovedTodo(todos[i].todo, true);
-      removedTodos.push(newRemovedTodo);
-      localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
-
-      console.log("Todos: ", todos);
-      console.log("Gjorda todos: ", removedTodos);
-      createTodoHtml(todos);
-      createRemovedTodosHtml(removedTodos);
-    }); */
+    checkbox.addEventListener("change", () => {
+      checkedCheckbox(checkbox, todos[i]);
+    });
   }
 };
+
+function checkedCheckbox(checkbox: HTMLInputElement, todo: Todo) {
+  if (checkbox.checked) {
+    let index = todos.indexOf(todo);
+    todos.splice(index, 1);
+    localStorage.setItem("todoList", JSON.stringify(todos));
+
+    todo.finished = !todo.finished;
+    console.log("Nu är det en checkad todo");
+
+    console.log("Nytt värde på finished", todo);
+
+    removedTodos.push(todo);
+    localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
+
+    createTodoHtml(todos);
+    createRemovedTodosHtml(removedTodos);
+  } else {
+    if ((checkbox.checked = false)) {
+      todo.finished = !todo.finished;
+      console.log("nu en avcheckad todo");
+    }
+  }
+}
 
 export const emptyTodoList = () => {
   const emptyBtn: HTMLSpanElement = document.getElementById(
@@ -114,38 +124,49 @@ export const emptyTodoList = () => {
   });
 };
 
-// export const createRemovedTodosHtml = (removedTodos: Todo[]) => {
-//   const doneList: HTMLDivElement = document.getElementById(
-//     "removed__list"
-//   ) as HTMLDivElement;
-//   doneList.innerHTML = "";
+export const createRemovedTodosHtml = (removedTodos: Todo[]) => {
+  const doneList: HTMLDivElement = document.getElementById(
+    "removedList"
+  ) as HTMLDivElement;
+  doneList.innerHTML = "";
 
-//   for (let i = 0; i < removedTodos.length; i++) {
-//     const todoContainer: HTMLParagraphElement = document.createElement("p");
-//     const todoTask: HTMLSpanElement = document.createElement("span");
-//     const doneBtn: HTMLButtonElement = document.createElement("button");
-//     const removeTodo: HTMLSpanElement = document.createElement("span");
+  for (let i = 0; i < removedTodos.length; i++) {
+    const todoContainer: HTMLParagraphElement = document.createElement("p");
+    const todoTask: HTMLSpanElement = document.createElement("span");
+    let checkbox: HTMLInputElement = document.createElement("input");
+    checkbox.type = "checkbox";
+    const removeTodo: HTMLSpanElement = document.createElement("span");
 
-//     todoContainer.className = "todoContainer__done";
-//     // todoTask.className = "todo";
-//     // doneBtn.className = "finished";
-//     // removeTodo.className = "removeTodo";
+    todoContainer.className = "todoContainer";
+    todoTask.className = "todo";
+    removeTodo.className = "removeTodo";
 
-//     todoTask.innerHTML = removedTodos[i].todo;
-//     doneBtn.innerHTML = "Markera oklar";
-//     removeTodo.innerHTML = "Ta bort";
+    todoTask.innerHTML = removedTodos[i].todo;
+    removeTodo.innerHTML = "Ta bort";
+    checkbox.checked = true;
 
-//     todoContainer.append(todoTask, doneBtn, removeTodo);
-//     doneList.appendChild(todoContainer);
+    todoContainer.append(todoTask, checkbox, removeTodo);
+    doneList.appendChild(todoContainer);
+    //     todoContainer.className = "todoContainer__done";
+    //     // todoTask.className = "todo";
+    //     // doneBtn.className = "finished";
+    //     // removeTodo.className = "removeTodo";
 
-//     removeTodo.addEventListener("click", () => {
-//       let index = removedTodos.indexOf(removedTodos[i]);
-//       removedTodos = removedTodos.splice(index, 1);
-//       localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
-//       createRemovedTodosHtml(removedTodos);
-//     });
-//   }
-// };
+    //     todoTask.innerHTML = removedTodos[i].todo;
+    //     doneBtn.innerHTML = "Markera oklar";
+    //     removeTodo.innerHTML = "Ta bort";
+
+    //     todoContainer.append(todoTask, doneBtn, removeTodo);
+    //     doneList.appendChild(todoContainer);
+
+    //     removeTodo.addEventListener("click", () => {
+    //       let index = removedTodos.indexOf(removedTodos[i]);
+    //       removedTodos = removedTodos.splice(index, 1);
+    //       localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
+    //       createRemovedTodosHtml(removedTodos);
+    //     });
+  }
+};
 
 export const emptyFinishedList = () => {
   const emptyBtn: HTMLSpanElement = document.getElementById(
@@ -155,6 +176,6 @@ export const emptyFinishedList = () => {
     removedTodos.splice(0, removedTodos.length);
     localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
     console.log("Tom removed lista: ", removedTodos);
-    // createRemovedTodosHtml(removedTodos);
+    createRemovedTodosHtml(removedTodos);
   });
 };

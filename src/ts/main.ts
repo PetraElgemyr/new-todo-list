@@ -1,6 +1,6 @@
 import {
   addTodoFromForm,
-  //   createRemovedTodosHtml,
+  createRemovedTodosHtml,
   createTodoHtml,
   emptyFinishedList,
   emptyTodoList,
@@ -19,6 +19,6 @@ window.onload = function () {
   createTodoHtml(todos);
   emptyTodoList();
 
-  //   createRemovedTodosHtml(removedTodos);
+  createRemovedTodosHtml(removedTodos);
   emptyFinishedList();
 };

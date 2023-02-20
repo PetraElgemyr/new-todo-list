@@ -566,7 +566,7 @@ window.onload = function() {
     (0, _functions.addTodoFromForm)();
     (0, _functions.createTodoHtml)(todos);
     (0, _functions.emptyTodoList)();
-    //   createRemovedTodosHtml(removedTodos);
+    (0, _functions.createRemovedTodosHtml)(removedTodos);
     (0, _functions.emptyFinishedList)();
 };
 
@@ -578,6 +578,7 @@ parcelHelpers.export(exports, "getRemovedTodosFromLS", ()=>getRemovedTodosFromLS
 parcelHelpers.export(exports, "addTodoFromForm", ()=>addTodoFromForm);
 parcelHelpers.export(exports, "createTodoHtml", ()=>createTodoHtml);
 parcelHelpers.export(exports, "emptyTodoList", ()=>emptyTodoList);
+parcelHelpers.export(exports, "createRemovedTodosHtml", ()=>createRemovedTodosHtml);
 parcelHelpers.export(exports, "emptyFinishedList", ()=>emptyFinishedList);
 var _todo = require("./models/Todo");
 let todos = getTodosFromLS();
@@ -622,7 +623,7 @@ const createTodoHtml = (todos)=>{
         removeTodo.className = "removeTodo";
         todoTask.innerHTML = todos[i].todo;
         removeTodo.innerHTML = "Ta bort";
-        let clickedObject = todos[i];
+        // let clickedObject: Todo = todos[i];
         todoContainer.append(todoTask, checkbox, removeTodo);
         todoWrapper.appendChild(todoContainer);
         removeTodo.addEventListener("click", ()=>{
@@ -635,25 +636,25 @@ const createTodoHtml = (todos)=>{
             console.log("Todos: ", todos);
             console.log("Gjorda todos: ", removedTodos);
         });
-    /*
-        doneBtn.addEventListener("click", () => {
-          //ta bort från todolista
-          let index = todos.indexOf(todos[i]);
-          todos.splice(index, 1);
-          localStorage.setItem("todoList", JSON.stringify(todos));
-    
-          // lägg till på borttagnalistan
-          //toggla classname och todo.finished-värdet
-          let newRemovedTodo: RemovedTodo = new RemovedTodo(todos[i].todo, true);
-          removedTodos.push(newRemovedTodo);
-          localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
-    
-          console.log("Todos: ", todos);
-          console.log("Gjorda todos: ", removedTodos);
-          createTodoHtml(todos);
-          createRemovedTodosHtml(removedTodos);
-        }); */ }
+        checkbox.addEventListener("change", ()=>{
+            checkedCheckbox(checkbox, todos[i]);
+        });
+    }
 };
+function checkedCheckbox(checkbox, todo) {
+    if (checkbox.checked) {
+        let index = todos.indexOf(todo);
+        todos.splice(index, 1);
+        localStorage.setItem("todoList", JSON.stringify(todos));
+        todo.finished = !todo.finished;
+        console.log("Nu \xe4r det en checkad todo");
+        console.log("Nytt v\xe4rde p\xe5 finished", todo);
+        removedTodos.push(todo);
+        localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
+        createTodoHtml(todos);
+        createRemovedTodosHtml(removedTodos);
+    } else checkbox.checked = false;
+}
 const emptyTodoList = ()=>{
     const emptyBtn = document.getElementById("emptyListBtn");
     emptyBtn.addEventListener("click", ()=>{
@@ -663,13 +664,47 @@ const emptyTodoList = ()=>{
         console.log("Tom todolista: ", todos);
     });
 };
+const createRemovedTodosHtml = (removedTodos)=>{
+    const doneList = document.getElementById("removedList");
+    doneList.innerHTML = "";
+    for(let i = 0; i < removedTodos.length; i++){
+        const todoContainer = document.createElement("p");
+        const todoTask = document.createElement("span");
+        let checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        const removeTodo = document.createElement("span");
+        todoContainer.className = "todoContainer";
+        todoTask.className = "todo";
+        removeTodo.className = "removeTodo";
+        todoTask.innerHTML = removedTodos[i].todo;
+        removeTodo.innerHTML = "Ta bort";
+        checkbox.checked = true;
+        todoContainer.append(todoTask, checkbox, removeTodo);
+        doneList.appendChild(todoContainer);
+    //     todoContainer.className = "todoContainer__done";
+    //     // todoTask.className = "todo";
+    //     // doneBtn.className = "finished";
+    //     // removeTodo.className = "removeTodo";
+    //     todoTask.innerHTML = removedTodos[i].todo;
+    //     doneBtn.innerHTML = "Markera oklar";
+    //     removeTodo.innerHTML = "Ta bort";
+    //     todoContainer.append(todoTask, doneBtn, removeTodo);
+    //     doneList.appendChild(todoContainer);
+    //     removeTodo.addEventListener("click", () => {
+    //       let index = removedTodos.indexOf(removedTodos[i]);
+    //       removedTodos = removedTodos.splice(index, 1);
+    //       localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
+    //       createRemovedTodosHtml(removedTodos);
+    //     });
+    }
+};
 const emptyFinishedList = ()=>{
     const emptyBtn = document.getElementById("emptyListBtnSecond");
     emptyBtn.addEventListener("click", ()=>{
         removedTodos.splice(0, removedTodos.length);
         localStorage.setItem("removedTodosInLs", JSON.stringify(removedTodos));
         console.log("Tom removed lista: ", removedTodos);
-    // createRemovedTodosHtml(removedTodos);
+        createRemovedTodosHtml(removedTodos);
     });
 };
 
